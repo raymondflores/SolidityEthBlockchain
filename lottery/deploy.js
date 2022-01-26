@@ -1,11 +1,10 @@
 const HDWalletProvider = require("@truffle/hdwallet-provider")
 const Web3 = require("web3")
+require("dotenv").config()
+
 const { abi, evm } = require("./compile")
 
-const provider = new HDWalletProvider(
-  "fluid asthma gossip theory van sponsor choose two purchase fog track village",
-  "https://rinkeby.infura.io/v3/dfd8ae9a8501406a8358cda30fa73664"
-)
+provider = new HDWalletProvider(process.env.SEED_PHRASE, process.env.PROVIDER)
 
 const web3 = new Web3(provider)
 

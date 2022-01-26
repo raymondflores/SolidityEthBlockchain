@@ -1,8 +1,10 @@
 const HDWalletProvider = require("@truffle/hdwallet-provider")
 const Web3 = require("web3")
-require("dotenv").config()
+const compiledFactory = require("./build/CampaignFactory.json")
 
-const { abi, evm } = require("./compile")
+require("dotenv").config({ path: "../.env" })
+
+console.log(process.env.SEED_PHRASE, process.env.PROVIDER)
 
 provider = new HDWalletProvider(process.env.SEED_PHRASE, process.env.PROVIDER)
 
@@ -13,12 +15,11 @@ const deploy = async () => {
 
   console.log("Attempting to deploy from account", accounts[0])
 
-  const result = await new web3.eth.Contract(abi)
-    .deploy({ data: evm.bytecode.object, arguments: ["Hi there!"] })
+  const result = await new web3.eth.Contract(JSON.parse(compiledFactory.interface))
+    .deploy({ data: compiledFactory.bytecode })
     .send({ gas: "1000000", from: accounts[0] })
 
   console.log("Contract deployed to", result.options.address)
   provider.engine.stop()
 }
-
 deploy()
